@@ -1,9 +1,9 @@
-
-name: Deploy CV to GitHub Pages
+name: Build and Deploy CV
 
 on:
   push:
-    branches: ["master"]
+    branches:
+      - master
   workflow_dispatch:
 
 permissions:
@@ -13,25 +13,26 @@ permissions:
 
 jobs:
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload site
-        uses: actions/upload-pages-artifact@v3
+      - name: Compile CV
+        uses: xu-cheng/latex-action@v4
         with:
-          path: .
+          root_file: cv.tex
 
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Prepare website
+        run: |
+          mkdir public
+          cp index.html public/
+          cp cv.pdf public/Sawani_Thiwandika_CV.pdf
 
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+      - uses: actions/deploy-pages@v4
