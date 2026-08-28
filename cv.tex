@@ -1,0 +1,442 @@
+\documentclass[10pt, letterpaper]{article}
+% Packages:
+\usepackage[
+ignoreheadfoot, % set margins without considering header and footer
+top=1 cm, % seperation between body and page edge from the top
+bottom=1.8 cm, % seperation between body and page edge from the bottom
+left=2 cm, % seperation between body and page edge from the left
+right=2 cm, % seperation between body and page edge from the right
+footskip=1.0 cm, % seperation between body and footer
+% showframe % for debugging
+]{geometry} % for adjusting page geometry
+\usepackage[explicit]{titlesec} % for customizing section titles
+\usepackage{tabularx} % for making tables with fixed width columns
+\usepackage{array} % tabularx requires this
+\usepackage[dvipsnames]{xcolor} % for coloring text
+\definecolor{primaryColor}{RGB}{0, 79, 144} % define primary color
+\usepackage{enumitem} % for customizing lists
+\usepackage{fontawesome5} % for using icons
+\usepackage{amsmath} % for math
+\usepackage[
+pdftitle={Sawani Thiwandika CV},
+pdfauthor={Sawani Thiwandika},
+pdfcreator={Sawani Thiwandika},
+colorlinks=true,
+urlcolor=primaryColor
+]{hyperref} % for links, metadata and bookmarks
+\usepackage[pscoord]{eso-pic} % for floating text on the page
+\usepackage{calc} % for calculating lengths
+\usepackage{bookmark} % for bookmarks
+\usepackage{lastpage} % for getting the total number of pages
+\usepackage{changepage} % for one column entries (adjustwidth environment)
+\usepackage{paracol} % for two and three column entries
+\usepackage{ifthen} % for conditional statements
+\usepackage{needspace}  % for avoiding page break right after the section title
+
+\usepackage{iftex} % check if engine is pdflatex, xetex or luatex
+% Ensure that generate pdf is machine readable/ATS parsable:
+\ifPDFTeX
+\input{glyphtounicode}
+\pdfgentounicode=1
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\fi
+% Professional font: Lato (clean, modern, widely used in top CVs)
+\usepackage[default]{lato}
+\usepackage[protrusion=true, expansion=true, tracking=true]{microtype} % improved text rendering
+% Some settings:
+\AtBeginEnvironment{adjustwidth}{\partopsep0pt} % remove space before adjustwidth environment
+\pagestyle{empty} % no header or footer
+\setcounter{secnumdepth}{0} % no section numbering
+\setlength{\parindent}{0pt} % no indentation
+\setlength{\topskip}{0pt} % no top skip
+\setlength{\columnsep}{0.15cm} % set column seperation
+\makeatletter
+\let\ps@customFooterStyle\ps@plain % Copy the plain style to customFooterStyle
+\patchcmd{\ps@customFooterStyle}{\thepage}{
+	\color{gray}\textit{\small  Page \thepage{} of \pageref*{LastPage}}
+}{}{} % replace number by desired string
+\makeatother
+\pagestyle{customFooterStyle}
+\titleformat{\section}{
+	% avoid page braking right after the section title
+	\needspace{4\baselineskip}
+	% make the font size of the section title large and color it with the primary color
+	\Large\color{primaryColor}
+}{
+}{
+}{
+	% print bold title, give 0.15 cm space and draw a line of 0.8 pt thickness
+	% from the end of the title to the end of the body
+	\textbf{#1}\hspace{0.15cm}\titlerule[0.8pt]\hspace{-0.1cm}
+}[] % section title formatting
+\titlespacing{\section}{
+	% left space:
+	-1pt
+}{
+	% top space:
+	0.35 cm
+}{
+	% bottom space:
+	0.25 cm
+} % section title spacing
+% \renewcommand\labelitemi{$\vcenter{\hbox{\small$\bullet$}}$} % custom bullet points
+\newenvironment{highlights}{
+	\vspace{0.02 cm}
+	\begin{itemize}[
+		topsep=0.09 cm,
+		parsep=0.09 cm,
+		partopsep=0pt,
+		itemsep=0pt,
+		leftmargin=0.4 cm + 10pt
+		]
+	}{
+	\end{itemize}
+} % new environment for highlights
+\newenvironment{highlightsforbulletentries}{
+	\begin{itemize}[
+		topsep=0.10 cm,
+		parsep=0.10 cm,
+		partopsep=0pt,
+		itemsep=0pt,
+		leftmargin=10pt
+		]
+	}{
+	\end{itemize}
+} % new environment for highlights for bullet entries
+
+\newenvironment{onecolentry}{
+	\begin{adjustwidth}{
+			0.2 cm + 0.00001 cm
+		}{
+			0.2 cm + 0.00001 cm
+		}
+	}{
+	\end{adjustwidth}
+} % new environment for one column entries
+\newenvironment{twocolentry}[2][]{
+	\onecolentry
+	\def\secondColumn{#2}
+	\setcolumnwidth{\fill, 4.5 cm}
+	\begin{paracol}{2}
+	}{
+		\switchcolumn \raggedleft \secondColumn
+	\end{paracol}
+	\endonecolentry
+} % new environment for two column entries
+\newenvironment{threecolentry}[3][]{
+	\onecolentry
+	\def\thirdColumn{#3}
+	\setcolumnwidth{1 cm, \fill, 4.5 cm}
+	\begin{paracol}{3}
+		{\raggedright #2} \switchcolumn
+	}{
+		\switchcolumn \raggedleft \thirdColumn
+	\end{paracol}
+	\endonecolentry
+} % new environment for three column entries
+\newenvironment{header}{
+	\setlength{\topsep}{0pt}\par\kern\topsep\centering\color{primaryColor}\linespread{1.5}
+}{
+	\par\kern\topsep
+} % new environment for the header
+% Replace the long \placelastupdatedtext command with this simpler one:
+\newcommand{\placelastupdatedtext}{%
+    \AddToShipoutPictureFG*{% Add <stuff> to current page foreground
+        \put(
+        \LenToUnit{\paperwidth - 0.5cm}, % Matches your right margin (adjust if you change the geometry)
+        \LenToUnit{\paperheight - 0.5cm} % Distance from the top edge of the page
+        ){\vtop{{\null}\makebox[0pt][r]{
+            \small\color{gray}\textit{Last updated on \today}
+        }}}%
+    }%
+}
+% save the original href command in a new command:
+\let\hrefWithoutArrow\href
+% new command for external links:
+\renewcommand{\href}[2]{\hrefWithoutArrow{#1}{\ifthenelse{\equal{#2}{}}{ }{#2 }\raisebox{.15ex}{\footnotesize \faExternalLink*}}}
+
+\begin{document}
+	\newcommand{\AND}{\unskip
+		\cleaders\copy\ANDbox\hskip\wd\ANDbox
+		\ignorespaces
+	}
+	\newsavebox\ANDbox
+	\sbox\ANDbox{}
+	\placelastupdatedtext
+	\begin{header}
+		\fontsize{26 pt}{26 pt}
+		\textbf{Sawani Thiwandika}
+
+		\vspace{0.2 cm}
+
+		\normalsize
+		\mbox{{\footnotesize\faMapMarker*}\hspace*{0.13cm} Kalutara, Sri Lanka}%
+		\kern 0.25 cm%
+		\AND%
+		\kern 0.25 cm%
+		\mbox{\hrefWithoutArrow{mailto:thiwandika.whs@gmail.com}{{\footnotesize\faEnvelope[regular]}\hspace*{0.13cm}thiwandika.whs@gmail.com}}%
+		\kern 0.25 cm%
+		\AND%
+		\kern 0.25 cm%
+		\mbox{\hrefWithoutArrow{tel:+94763519008}{{\footnotesize\faPhone*}\hspace*{0.13cm}+94 76 351 9008}}%
+		\kern 0.25 cm%
+		\AND%
+		\kern 0.25 cm%
+		\mbox{\hrefWithoutArrow{https://sawani-thiwandika.vercel.app/}{{\footnotesize\faLink}\hspace*{0.13cm}sawani-thiwandika.vercel.app}}%
+		\kern 0.25 cm%
+		\AND%
+		\kern 0.25 cm%
+		\mbox{\hrefWithoutArrow{https://www.linkedin.com/in/sawani-thiwandika-131332287}{{\footnotesize\faLinkedinIn}\hspace*{0.13cm}sawani-thiwandika}}%
+		\kern 0.25 cm%
+		\AND%
+		\kern 0.25 cm%
+		\mbox{\hrefWithoutArrow{https://github.com/sawaniThiwandika}{{\footnotesize\faGithub}\hspace*{0.13cm}sawaniThiwandika}}%
+	\end{header}
+	\vspace{0.15 cm - 0.3 cm}
+
+	%============================================================
+	\section{Profile Summary}
+	%============================================================
+	\begin{onecolentry}
+        IT undergraduate at the University of Moratuwa with hands-on experience designing and developing full-stack web and mobile applications. Strong foundation in object-oriented programming, RESTful API development, and database design, with practical experience collaborating on team-based software projects. Eager to apply strong problem-solving skills and continuously learn modern software engineering practices while contributing to impactful, real-world products as a Software Engineering Intern.
+	\end{onecolentry}
+
+	%============================================================
+	\section{Education}
+	%============================================================
+	\begin{twocolentry}{
+	    2024 -- Present
+	}
+	\textbf{University of Moratuwa}\\
+	\hspace*{1.5em}\textbullet\ BSc (Hons) in Information Technology -- CGPA 3.54 / 4.00
+	\end{twocolentry}
+	\vspace{0.20 cm}
+	\begin{twocolentry}{
+	    2023 -- 2025
+	}
+	\textbf{Institute of Software Engineering (IJSE), Panadura}\\
+	\hspace*{1.5em}\textbullet\ Graduate Diploma in Software Engineering
+	\end{twocolentry}
+	\vspace{0.20 cm}
+	\begin{twocolentry}{
+	    2013 -- 2022
+	}
+	\textbf{Ananda Sastralaya, Matugama}\\
+	\hspace*{1.5em}\textbullet\ G.C.E. A/L 2022: Physical Science Stream $\cdot$ Z-Score: 1.6528
+	\end{twocolentry}
+
+	%============================================================
+	\section{Notable Projects}
+	%============================================================
+	\begin{onecolentry}
+	    \textbf{Hostel Management System} $|$ \textit{Java (Spring Boot), MySQL, Hibernate, React.js, TypeScript, Tailwind CSS} \hfill \faGithub\ \hrefWithoutArrow{https://github.com/sawaniThiwandika/HostelManagementSystem-Backend.git}{GitHub}
+	\end{onecolentry}
+	\vspace{0.09 cm}
+	\begin{onecolentry}
+	    \begin{highlights}
+	        \item  Manages room allocation, resident and staff records, equipment inventory, complaints, payments, and reminders on a centralized digital platform
+	    \end{highlights}
+	\end{onecolentry}
+	\vspace{0.24 cm}
+	\begin{onecolentry}
+	    \textbf{Green-Shadow} $|$ \textit{Java (Spring Boot), HTML/JS/Bootstrap, MySQL, Hibernate} \hfill \faGithub\ \hrefWithoutArrow{https://github.com/sawaniThiwandika/green-shadow-backend.git}{GitHub}
+	\end{onecolentry}
+	\vspace{0.09 cm}
+	\begin{onecolentry}
+	    \begin{highlights}
+	        \item Centralized farm management system that consolidates crop, field, staff, vehicle, and equipment operations into a single streamlined platform.
+	    \end{highlights}
+	\end{onecolentry}
+	\vspace{0.24 cm}
+	\begin{onecolentry}
+	    \textbf{IEEE PES Student Branch Website} $|$ \textit{React.js, Tailwind CSS, TypeScript} \hfill \hrefWithoutArrow{https://ieee-pes.uom.lk/}{\faExternalLink*\ ieee-pes.uom.lk}
+	\end{onecolentry}
+	\vspace{0.09 cm}
+	\begin{onecolentry}
+	    \begin{highlights}
+	        \item Official website of the IEEE Power \& Energy Society Student Branch Chapter at the University of Moratuwa, presenting the chapter's committees and events while promoting innovation and education in electric power engineering.
+	        \item Contributed to building the Home, Volunteer, and Projects pages of the platform.
+	    \end{highlights}
+	\end{onecolentry}
+	\vspace{0.24 cm}
+	\begin{onecolentry}
+	    \textbf{DOC-Flow} $|$ \textit{Level 2 Software Project -- React.js, TypeScript, Django REST Framework, MySQL, Tailwind CSS} \hfill \faGithub\ \hrefWithoutArrow{https://github.com/CodeCraft-Software-Project-46/Doc-Flow-Backend.git}{GitHub}
+	\end{onecolentry}
+	\vspace{0.09 cm}
+	\begin{onecolentry}
+	    \begin{highlights}
+	        \item Configurable document management system that adapts role-based dashboards, approval workflows, and access permissions to an organization's structure, giving teams full visibility into document status in real time.
+	        \item Developed the User, Role, Permission, and Department modules, the configurable dashboard system, and the workflow version comparison and rollback modules.
+	    \end{highlights}
+	\end{onecolentry}
+	\vspace{0.24 cm}
+	\begin{onecolentry}
+	    \textbf{Uni-Thaksalawa} $|$ \textit{Group Project -- MongoDB, Express.js, React.js, Node.js, Tailwind CSS} \hfill \faGithub\ \hrefWithoutArrow{https://github.com/Lumos-Solution/uni-thaksalawa-frontend.git}{GitHub}
+	\end{onecolentry}
+	\vspace{0.09 cm}
+	\begin{onecolentry}
+	    \begin{highlights}
+	        \item Student-teacher platform for discovering, enrolling in, and managing tuition classes, backed by real-time notifications for schedules and updates.
+	        \item Developed the project's backend and the frontend Profile page.
+	    \end{highlights}
+	\end{onecolentry}
+	\vspace{0.24 cm}
+	\begin{onecolentry}
+	    \textbf{DressAura} $|$ \textit{Java 11, JavaFX, MySQL, CSS} \hfill \faGithub\ \hrefWithoutArrow{https://github.com/sawaniThiwandika/dressaura.git}{GitHub}
+	\end{onecolentry}
+	\vspace{0.09 cm}
+	\begin{onecolentry}
+	    \begin{highlights}
+	        \item Complete dress rental and tailoring management system handling customers, employees, suppliers, stock, payments, and orders, with conflict-free booking and automated late-return reminders.
+	    \end{highlights}
+	\end{onecolentry}
+	\vspace{0.24 cm}
+	\begin{onecolentry}
+	    \textbf{Medi-Flow} $|$ \textit{Group Project -- Java (Spring Boot), React.js, React Native, MySQL} \hfill \faGithub\ \hrefWithoutArrow{https://github.com/INNOV8SOFT-PVT-LTD/MediFlowApp.git}{GitHub}
+	\end{onecolentry}
+	\vspace{0.09 cm}
+	\begin{onecolentry}
+	    \begin{highlights}
+	        \item Nationwide healthcare platform connecting hospitals, clinics, pharmacies, and patients for unified patient record management, appointment scheduling, and service coordination.
+	        \item Developed the mobile application using React Native.
+	    \end{highlights}
+	\end{onecolentry}
+	\vspace{0.24 cm}
+	\begin{onecolentry}
+	    \textbf{Sinharaja} $|$ \textit{React.js, Tailwind CSS, TypeScript} \hfill \faGithub\ \hrefWithoutArrow{https://github.com/sawaniThiwandika/sinharaja.git}{GitHub} $|$ \hrefWithoutArrow{https://sinharaja-nine.vercel.app/}{\faExternalLink*\ sinharaja-nine.vercel.app}
+	\end{onecolentry}
+	\vspace{0.09 cm}
+	\begin{onecolentry}
+	    \begin{highlights}
+	        \item Informational tour-guide website for Sinharaja Forest Reserve, built to help travelers plan and navigate visits to Sri Lanka's premier rainforest reserve.
+	    \end{highlights}
+	\end{onecolentry}
+	\vspace{0.24 cm}
+	\begin{onecolentry}
+	    \textbf{Edge Maker V1 } $|$ \textit{Level 1 Microcontroller-Based Project -- Arduino, GRBL Firmware, React.js, Tailwind CSS, Firebase}\\          \hfill \faGithub\ \hrefWithoutArrow{https://github.com/Micro-Minds/foam-cutter-frontend.git}{GitHub} $|$ \hrefWithoutArrow{https://cnc-foam-cutter.web.app/}{\faExternalLink*\ cnc-foam-cutter.web.app}
+	\end{onecolentry}
+	\vspace{0.09 cm}
+	\begin{onecolentry}
+	    \begin{highlights}
+	        \item CNC foam-cutting machine that automatically converts an input image into a precise cutting design, executed via stepper-motor-driven movement and paired with a web app for design file management.
+	        \item Wired the limit switches and designed the buck converter power system; built ESP32 web app connectivity and the Firebase backend and library page.
+	    \end{highlights}
+	\end{onecolentry}
+
+	%============================================================
+	\section{Technical Skills}
+	%============================================================
+	\begin{onecolentry}
+	    \textbf{Languages:} Java, C, Python, JavaScript, TypeScript
+	\end{onecolentry}
+	\vspace{0.20 cm}
+	\begin{onecolentry}
+	    \textbf{Frameworks \& Libraries:} Spring Boot, React.js, React Native, Node.js, Express.js, Django REST Framework
+	\end{onecolentry}
+	\vspace{0.20 cm}
+	\begin{onecolentry}
+	    \textbf{Databases:} MySQL, MongoDB, MSSQL
+	\end{onecolentry}
+	\vspace{0.20 cm}
+	\begin{onecolentry}
+	    \textbf{ORMs:} Prisma, Hibernate, Mongoose
+	\end{onecolentry}
+	\vspace{0.20 cm}
+	\begin{onecolentry}
+	    \textbf{Cloud \& Tools:} AWS, Google Cloud, Firebase, Docker, Git, Postman
+	\end{onecolentry}
+	\vspace{0.20 cm}
+	\begin{onecolentry}
+	    \textbf{Styling \& Design:} Tailwind CSS, Bootstrap, Figma, UI/UX
+	\end{onecolentry}
+
+	%============================================================
+	\section{Achievements}
+	%============================================================
+	\begin{onecolentry}
+	    \textbf{2nd Place -- Circle Edge Creative Software Solution Awards} $|$ \textit{Institute of Software Engineering} \hfill \textit{2024}
+	\end{onecolentry}
+	\vspace{0.12 cm}
+	\begin{onecolentry}
+	    \textbf{3rd Place -- First Semester Professional Software Projects} $|$ \textit{GDSE 67, Institute of Software Engineering} \hfill \textit{2023}
+	\end{onecolentry}
+	\vspace{0.12 cm}
+	\begin{onecolentry}
+	    \textbf{Best Workplace -- Innovesta '23} $|$ \textit{Institute of Software Engineering} \hfill \textit{2023}
+	\end{onecolentry}
+
+	%============================================================
+	\section{Certifications}
+	%============================================================
+	\begin{onecolentry}
+	    \textbf{Web Development with jQuery, Ajax and JSON} $|$ \textit{Alison}
+	\end{onecolentry}
+	\vspace{0.12 cm}
+	\begin{onecolentry}
+	    \textbf{Python for Beginners} $|$ \textit{University of Moratuwa -- Open Learning Platform}
+	\end{onecolentry}
+	\vspace{0.12 cm}
+	\begin{onecolentry}
+	    \textbf{Web Design for Beginners} $|$ \textit{University of Moratuwa -- Open Learning Platform}
+	\end{onecolentry}
+
+	%============================================================
+	\section{Leadership \& Extra Curricular Activities}
+	%============================================================
+	\begin{onecolentry}
+	    \textbf{IEEE PES Student Branch Chapter, University of Moratuwa}
+	\end{onecolentry}
+	\begin{onecolentry}
+	    \begin{highlights}
+	        \item Web Development Committee Lead \hfill \textit{Jan 2026 -- Present}
+	    \end{highlights}
+	\end{onecolentry}
+	\vspace{0.12 cm}
+	\begin{onecolentry}
+	    \textbf{MoraSpirit, University of Moratuwa}
+	\end{onecolentry}
+	\begin{onecolentry}
+	    \begin{highlights}
+	        \item Member, Web \& Technology Pillar \hfill \textit{May 2026 -- Present}
+	    \end{highlights}
+	\end{onecolentry}
+	\vspace{0.12 cm}
+	\begin{onecolentry}
+	    \textbf{IEEE Student Branch, University of Moratuwa}
+	\end{onecolentry}
+	\begin{onecolentry}
+	    \begin{highlights}
+	        \item Program \& Technical Committee Member -- ICITR 2025 \hfill \textit{Dec 2025}
+	    \end{highlights}
+	\end{onecolentry}
+
+	%============================================================
+	\section*{References}
+	%============================================================
+	\begin{onecolentry}
+	    \begin{minipage}[t]{0.31\textwidth}
+	        \textbf{Prof. (Ms) S. Ahangama}\\
+	        Professor\\
+	        Faculty of Information Technology, University of Moratuwa\\
+	        +94 71 486 6652\\
+	        \href{mailto:supunmali@uom.lk}{supunmali@uom.lk}
+	    \end{minipage}%
+	    \hspace{0.04\textwidth}%
+	    \begin{minipage}[t]{0.31\textwidth}
+	        \textbf{Dr. A.L.A.R.R. Thanuja}\\
+	       Senior Lecturer\\
+	        Faculty of Information Technology, University of Moratuwa\\
+	        +94 77 747 6511\\
+	        \href{mailto:romesht@uom.lk}{romesht@uom.lk}
+	    \end{minipage}%
+	    \hspace{0.04\textwidth}%
+	    \begin{minipage}[t]{0.30\textwidth}
+	        \textbf{Mrs. Lakshmi Kanchana}\\
+	        Associate Tech Lead\\
+	        Ceyentra Technologies Pvt Ltd\\
+	        +94 70 232 9664\\
+	        \href{mailto:lklakshmikanchana@gmail.com}{lklakshmikanchana@gmail.com}
+	    \end{minipage}
+	\end{onecolentry}
+\end{document}

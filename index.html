@@ -1,0 +1,456 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sawani Thiwandika | CV</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #0c0f0c;
+            --panel: #121612;
+            --border: #2a332a;
+            --green: #3ecf6e;
+            --green-dim: #1f7a3d;
+            --amber: #c9a227;
+            --text: #c8d6c8;
+            --muted: #6b7a6b;
+            --chrome: #1a221a;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            font-family: "IBM Plex Mono", monospace;
+            background:
+                    radial-gradient(
+                            ellipse 80% 50% at 50% -20%,
+                            #1a2e1a 0%,
+                            transparent 55%
+                    ),
+                    var(--bg);
+            color: var(--text);
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            padding: 18px;
+            gap: 12px;
+            min-height: 100vh;
+        }
+
+        /* =========================
+           TERMINAL BOOT SECTION
+           ========================= */
+
+        .boot {
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--muted);
+            max-width: 900px;
+        }
+
+        .prompt {
+            color: var(--green);
+        }
+
+        .command {
+            color: var(--text);
+        }
+
+        .success {
+            color: var(--green);
+        }
+
+        .path {
+            color: var(--amber);
+        }
+
+        /* =========================
+           MAIN WINDOW
+           ========================= */
+
+        .window {
+            flex: 1;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+
+            background: var(--panel);
+
+            box-shadow:
+                    0 0 0 1px rgba(62, 207, 110, 0.04),
+                    0 24px 48px rgba(0, 0, 0, 0.45);
+        }
+
+        /* =========================
+           TITLE BAR
+           ========================= */
+
+        .titlebar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            padding: 9px 14px;
+
+            background: var(--chrome);
+            border-bottom: 1px solid var(--border);
+
+            user-select: none;
+        }
+
+        .dots {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .dots span {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: block;
+        }
+
+        .dots span:nth-child(1) {
+            background: #e25555;
+        }
+
+        .dots span:nth-child(2) {
+            background: #e2b04a;
+        }
+
+        .dots span:nth-child(3) {
+            background: #3ecf6e;
+        }
+
+        .title {
+            flex: 1;
+            text-align: center;
+
+            color: var(--muted);
+            font-size: 12px;
+            letter-spacing: 0.04em;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* =========================
+           BUTTONS
+           ========================= */
+
+        .actions {
+            display: flex;
+            gap: 7px;
+            flex-shrink: 0;
+        }
+
+        .actions a {
+            font-family: inherit;
+            font-size: 11px;
+            font-weight: 500;
+
+            color: var(--green);
+
+            background: transparent;
+
+            border: 1px solid var(--green-dim);
+            border-radius: 4px;
+
+            padding: 5px 9px;
+
+            text-decoration: none;
+
+            transition:
+                    background 0.15s ease,
+                    border-color 0.15s ease,
+                    color 0.15s ease;
+        }
+
+        .actions a:hover {
+            background: rgba(62, 207, 110, 0.12);
+            border-color: var(--green);
+            color: #7dffab;
+        }
+
+        .actions a.secondary {
+            color: var(--muted);
+            border-color: var(--border);
+        }
+
+        .actions a.secondary:hover {
+            color: var(--text);
+            border-color: var(--muted);
+            background: rgba(200, 214, 200, 0.06);
+        }
+
+        /* =========================
+           PDF VIEWER
+           ========================= */
+
+        .viewer {
+            flex: 1;
+            min-height: 0;
+            position: relative;
+            background: #1e241e;
+        }
+
+        .viewer::before {
+            content: "";
+            pointer-events: none;
+
+            position: absolute;
+            inset: 0;
+
+            z-index: 2;
+
+            background: repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0, 0, 0, 0.03) 2px,
+                    rgba(0, 0, 0, 0.03) 4px
+            );
+
+            opacity: 0.4;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+
+            border: none;
+            display: block;
+
+            background: #525659;
+        }
+
+        /* =========================
+           STATUS BAR
+           ========================= */
+
+        .status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            gap: 15px;
+
+            padding: 6px 14px;
+
+            font-size: 10px;
+            color: var(--muted);
+
+            background: var(--chrome);
+
+            border-top: 1px solid var(--border);
+        }
+
+        .live::before {
+            content: "";
+
+            display: inline-block;
+
+            width: 6px;
+            height: 6px;
+
+            margin-right: 6px;
+
+            border-radius: 50%;
+
+            background: var(--green);
+
+            box-shadow: 0 0 6px var(--green);
+
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.35;
+            }
+        }
+
+        /* =========================
+           RESPONSIVE
+           ========================= */
+
+        @media (max-width: 700px) {
+
+            body {
+                padding: 7px;
+            }
+
+            .boot {
+                display: none;
+            }
+
+            .title {
+                display: none;
+            }
+
+            .titlebar {
+                padding: 8px 10px;
+            }
+
+            .status {
+                font-size: 9px;
+            }
+
+            .status span:last-child {
+                display: none;
+            }
+
+            .actions a {
+                padding: 5px 7px;
+            }
+        }
+
+        @media (max-width: 400px) {
+
+            .dots {
+                display: none;
+            }
+
+            .actions {
+                width: 100%;
+            }
+
+            .actions a {
+                flex: 1;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- =========================
+     TERMINAL INTRO
+     ========================= -->
+
+<div class="boot">
+
+    <div>
+        <span class="prompt">sawani@portfolio</span>
+        <span class="command">:</span>
+        <span class="path">~/cv</span>
+        <span class="command">$</span>
+        <span class="command"> ./open-cv</span>
+    </div>
+
+    <div>
+        Initializing CV viewer...
+        <span class="success">OK</span>
+    </div>
+
+    <div>
+        Loading
+        <span class="path">Sawani_Thiwandika_CV</span>
+        ...
+        <span class="success">READY</span>
+    </div>
+
+</div>
+
+
+<!-- =========================
+     CV WINDOW
+     ========================= -->
+
+<main class="window" role="region" aria-label="CV viewer">
+
+    <!-- TITLE BAR -->
+
+    <div class="titlebar">
+
+        <div class="dots" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <div class="title">
+            Sawani_Thiwandika_CV.pdf | sawani@portfolio
+        </div>
+
+        <div class="actions">
+
+            <a
+                    href="Sawani_Thiwandika_CV.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="secondary"
+            >
+                open
+            </a>
+
+            <a
+                    href="Sawani_Thiwandika_CV.pdf"
+                    download="Sawani_Thiwandika_CV.pdf"
+            >
+                download
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- PDF -->
+
+    <div class="viewer">
+
+        <iframe
+                src="Sawani_Thiwandika_CV.pdf#view=FitH"
+                title="Sawani Thiwandika CV"
+        ></iframe>
+
+    </div>
+
+
+    <!-- STATUS BAR -->
+
+    <div class="status">
+
+      <span class="live">
+        previewing cv.pdf
+      </span>
+
+        <span>
+        © 2026 Sawani Thiwandika
+      </span>
+
+    </div>
+
+</main>
+
+</body>
+</html>
+```
